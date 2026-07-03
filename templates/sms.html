@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMS Checker — ScamSense</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="bg-light">
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="/">
+            <i class="fas fa-shield-alt text-danger"></i> ScamSense
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="/transaction">Check Transaction</a>
+                <a class="nav-link active" href="/sms">Check SMS</a>
+                <a class="nav-link" href="/dashboard">Dashboard</a>
+                <a class="nav-link" href="/about">About</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="bg-dark text-white py-4">
+    <div class="container">
+        <h3 class="fw-bold mb-1">
+            <i class="fas fa-sms text-warning"></i> SMS Phishing Checker
+        </h3>
+        <p class="text-white-50 mb-0">Paste any suspicious SMS to check if it is a phishing attempt</p>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row justify-content-center g-4">
+
+        <div class="col-md-6">
+            <div class="card shadow border-0">
+                <div class="card-body p-5">
+                    <h5 class="fw-bold mb-4 text-warning">
+                        <i class="fas fa-search"></i> Enter SMS Message
+                    </h5>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Paste SMS Message</label>
+                        <textarea id="sms_text" class="form-control" rows="5"
+                                  placeholder="Paste the suspicious SMS message here..."
+                                  maxlength="1000"></textarea>
+                        <div class="form-text">Maximum 1000 characters allowed.</div>
+                    </div>
+
+                    <p class="text-muted small fw-bold mb-2">Quick Test Samples:</p>
+                    <div class="d-flex flex-wrap gap-2 mb-4">
+                        <button class="btn btn-sm btn-outline-danger" onclick="loadSample('phishing1')">Phishing Sample 1</button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="loadSample('phishing2')">Phishing Sample 2</button>
+                        <button class="btn btn-sm btn-outline-success" onclick="loadSample('safe1')">Safe SMS 1</button>
+                        <button class="btn btn-sm btn-outline-success" onclick="loadSample('safe2')">Safe SMS 2</button>
+                    </div>
+
+                    <button id="sms-btn" onclick="checkSMS()"
+                            class="btn btn-warning btn-lg w-100 fw-bold py-3 text-dark">
+                        <i class="fas fa-search"></i> Analyze SMS
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-5">
+            <div class="card shadow border-0 mb-4">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold mb-3">
+                        <i class="fas fa-chart-pie text-warning"></i> Detection Result
+                    </h5>
+
+                    <div id="sms-default" class="text-center py-4 text-muted">
+                        <i class="fas fa-sms fa-3x mb-3 opacity-25"></i>
+                        <p>Paste an SMS and click<br><strong>Analyze SMS</strong></p>
+                    </div>
+
+                    <div id="sms-loading" class="text-center py-4 d-none">
+                        <div class="spinner-border text-warning mb-3" role="status"></div>
+                        <p class="text-muted">Analyzing SMS...</p>
+                    </div>
+
+                    <div id="sms-result" class="d-none">
+                        <div id="sms-alert" class="alert text-center fs-5 fw-bold mb-3"></div>
+                        <div class="bg-light rounded p-3 small">
+                            <p class="fw-bold mb-1">Message analyzed:</p>
+                            <p id="sms-preview" class="text-muted mb-0"
+                               style="max-height: 80px; overflow-y: auto;"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card border-0 bg-dark text-white">
+                <div class="card-body p-4">
+                    <h6 class="fw-bold mb-3">
+                        <i class="fas fa-info-circle text-warning"></i> How SMS Detection Works
+                    </h6>
+                    <ul class="small text-white-50 mb-0 ps-3">
+                        <li class="mb-1">SMS text is converted to numerical features using TF-IDF</li>
+                        <li class="mb-1">Bigrams capture common phishing phrase patterns</li>
+                        <li class="mb-1">Logistic Regression classifies as phishing or legitimate</li>
+                        <li>Model trained on 100 labeled phishing and legitimate SMS samples</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<footer class="bg-dark text-white text-center py-3 mt-5">
+    <p class="mb-0 text-white-50 small">&copy; 2026 ScamSense — AI-Powered Fraud Detection</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+const MAX_SMS_LEN = 1000;
+
+function resetSMSToDefault() {
+    document.getElementById('sms-loading').classList.add('d-none');
+    document.getElementById('sms-result').classList.add('d-none');
+    document.getElementById('sms-default').classList.remove('d-none');
+}
+
+function loadSample(type) {
+    const samples = {
+        phishing1: "URGENT: Your SBI account is blocked! Click http://sbi-verify.xyz to reactivate immediately.",
+        phishing2: "Congratulations! You won Rs.50,000 in lucky draw. Call 9999999999 to claim your prize now!",
+        safe1: "Dear customer, your UPI transaction of Rs.500 to Swiggy is successful. Ref: TXN20260701",
+        safe2: "Your Flipkart order #FL789 has been shipped. Expected delivery tomorrow by 6 PM."
+    };
+    document.getElementById('sms_text').value = samples[type] || '';
+}
+
+async function checkSMS() {
+    const message = document.getElementById('sms_text').value.trim();
+
+    // FIX 1: Validate empty
+    if (!message) {
+        alert('Please enter an SMS message.');
+        return;
+    }
+
+    // FIX 1: Validate max length
+    if (message.length > MAX_SMS_LEN) {
+        alert(`Message too long. Maximum ${MAX_SMS_LEN} characters allowed.`);
+        return;
+    }
+
+    const btn = document.getElementById('sms-btn');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Analyzing...';
+
+    document.getElementById('sms-default').classList.add('d-none');
+    document.getElementById('sms-result').classList.add('d-none');
+    document.getElementById('sms-loading').classList.remove('d-none');
+
+    try {
+        const response = await fetch('/predict_sms', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message })
+        });
+
+        // FIX 2: Check HTTP status
+        if (!response.ok) {
+            const errData = await response.json().catch(() => ({}));
+            const msg = errData.error || `Server error (${response.status}). Please try again.`;
+            alert(msg);
+            resetSMSToDefault();  // FIX 4: Reset spinner on error
+            return;
+        }
+
+        const data = await response.json();
+
+        // FIX 3: Handle API-level error in body
+        if (data.error) {
+            alert(data.error);
+            resetSMSToDefault();  // FIX 4: Reset spinner
+            return;
+        }
+
+        document.getElementById('sms-loading').classList.add('d-none');
+        document.getElementById('sms-result').classList.remove('d-none');
+
+        const alertBox = document.getElementById('sms-alert');
+
+        if (data.result === 'PHISHING') {
+            alertBox.className = 'alert alert-danger text-center fs-5 fw-bold mb-3';
+            alertBox.innerHTML = '🚨 PHISHING DETECTED!<br><small class="fw-normal">Do not click any links in this SMS</small>';
+        } else {
+            alertBox.className = 'alert alert-success text-center fs-5 fw-bold mb-3';
+            alertBox.innerHTML = '✅ SAFE SMS<br><small class="fw-normal">This message appears legitimate</small>';
+        }
+
+        // FIX: Use textContent not innerHTML to prevent XSS
+        document.getElementById('sms-preview').textContent = message;
+
+    } catch (err) {
+        alert('Network error. Please check your connection and try again.');
+        resetSMSToDefault();  // FIX 4: Always reset on failure
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-search"></i> Analyze SMS';
+    }
+}
+</script>
+</body>
+</html>

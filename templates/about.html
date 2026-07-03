@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About — ScamSense</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="bg-light">
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="/">
+            <i class="fas fa-shield-alt text-danger"></i> ScamSense
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="/transaction">Check Transaction</a>
+                <a class="nav-link" href="/sms">Check SMS</a>
+                <a class="nav-link" href="/dashboard">Dashboard</a>
+                <a class="nav-link active" href="/about">About</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="bg-dark text-white py-4">
+    <div class="container">
+        <h3 class="fw-bold mb-1">
+            <i class="fas fa-info-circle text-danger"></i> About ScamSense
+        </h3>
+        <p class="text-white-50 mb-0">Project overview, methodology, and technical details</p>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-9">
+
+            <!-- Overview -->
+            <div class="card shadow border-0 mb-4">
+                <div class="card-body p-5">
+                    <h4 class="fw-bold text-danger mb-3">Project Overview</h4>
+                    <p class="lead">ScamSense is an AI-powered fraud detection system that identifies suspicious UPI transactions and phishing SMS messages in real time.</p>
+                    <p class="text-muted">Digital payment fraud in India has grown significantly with the rise of UPI. ScamSense applies Machine Learning and Natural Language Processing to help users identify potential fraud before it causes financial harm.</p>
+                </div>
+            </div>
+
+            <!-- Models -->
+            <div class="card shadow border-0 mb-4">
+                <div class="card-body p-5">
+                    <h4 class="fw-bold mb-4">Technical Approach</h4>
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="p-4 bg-light rounded h-100">
+                                <h6 class="fw-bold text-danger">
+                                    <i class="fas fa-credit-card"></i> Transaction Fraud Model
+                                </h6>
+                                <ul class="small text-muted ps-3 mb-0">
+                                    <li class="mb-1">Algorithm: Random Forest Classifier</li>
+                                    <li class="mb-1">Features: Amount, transaction type, time of day, round-number flag, high-amount flag, late-night flag</li>
+                                    <li class="mb-1">Training: Simulated realistic transaction dataset with class balance</li>
+                                    <li>Accuracy: {{ fraud_acc }}%</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="p-4 bg-light rounded h-100">
+                                <h6 class="fw-bold text-warning">
+                                    <i class="fas fa-sms"></i> SMS Phishing Model
+                                </h6>
+                                <ul class="small text-muted ps-3 mb-0">
+                                    <li class="mb-1">Algorithm: Logistic Regression</li>
+                                    <li class="mb-1">Features: TF-IDF unigrams and bigrams (3000 features)</li>
+                                    <li class="mb-1">Training: 100 labeled SMS messages (50 phishing, 50 legitimate)</li>
+                                    <li>Accuracy: {{ sms_acc }}%</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Limitations - honest -->
+            <div class="card shadow border-0 mb-4">
+                <div class="card-body p-5">
+                    <h4 class="fw-bold mb-3">Known Limitations</h4>
+                    <ul class="text-muted">
+                        <li class="mb-2">The fraud model is trained on simulated data — a production system would use real anonymized transaction data from financial institutions.</li>
+                        <li class="mb-2">The SMS dataset is small (100 samples). A larger labeled corpus would significantly improve robustness.</li>
+                        <li class="mb-2">The system does not have access to real-time bank APIs or transaction networks.</li>
+                        <li>Fraud detection recall is 63% — meaning some fraud cases may not be flagged. This is a known trade-off between precision and recall.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Tech Stack -->
+            <div class="card shadow border-0 mb-4 bg-dark text-white">
+                <div class="card-body p-5">
+                    <h4 class="fw-bold mb-4">Tech Stack</h4>
+                    <div class="row text-center g-3">
+                        {% for tech in ['Python', 'Flask', 'Scikit-learn', 'Pandas', 'NumPy', 'SQLite', 'Bootstrap', 'TF-IDF', 'NLP', 'HTML/CSS'] %}
+                        <div class="col-4 col-md-2">
+                            <div class="p-2 rounded" style="background: rgba(255,255,255,0.1);">
+                                <p class="fw-bold small mb-0">{{ tech }}</p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<footer class="bg-dark text-white text-center py-3">
+    <p class="mb-0 text-white-50 small">&copy; 2026 ScamSense — AI-Powered Fraud Detection</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
