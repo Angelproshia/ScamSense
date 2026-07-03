@@ -1,11 +1,14 @@
-# ScamSense — AI-Powered UPI & Digital Payment Fraud Detection
+# ScamSense — AI-Powered UPI Fraud Detection
 
-A final year project that uses Machine Learning and NLP to detect
-fraudulent transactions and phishing SMS messages in real time.
+AI-powered system that detects fraudulent UPI transactions 
+and SMS phishing attacks in real time using Machine Learning.
+
+## Live Demo
+🌐 Coming soon on Render.com
 
 ## Features
 - Transaction fraud detection using Random Forest (83.9% accuracy)
-- SMS phishing detection using TF-IDF + Logistic Regression (95% accuracy)
+- SMS phishing detection using TF-IDF + Logistic Regression (95% accuracy)  
 - Live dashboard with detection history
 - Input validation and secure error handling
 
@@ -27,17 +30,16 @@ python app.py
 http://127.0.0.1:5000
 
 ## Project Structure
-- app.py          — Flask backend
-- train_model.py  — ML model training
-- templates/      — HTML pages
-- static/         — CSS and JS
-- models/         — Saved ML models
+- app.py           Flask backend and API routes
+- train_model.py   ML model training script
+- templates/       HTML pages
+- static/          CSS and JS files
+- models/          Saved ML models (auto-generated)
 
 ## Limitations
 - Fraud model trained on simulated data
 - SMS dataset contains 100 labeled samples
 - No real-time bank API integration
-- Time used is server submission time, not actual transaction time
 
 ## Author
 Angel Proshia | 2026
