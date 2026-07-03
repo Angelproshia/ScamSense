@@ -1,0 +1,6 @@
+scamsense.db
+__pycache__/
+*.pyc
+.env
+models/*.pkl
+models/metrics.json
