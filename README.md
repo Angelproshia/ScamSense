@@ -4,7 +4,7 @@ AI-powered system that detects fraudulent UPI transactions
 and SMS phishing attacks in real time using Machine Learning.
 
 ## Live Demo
-🌐 Coming soon on Render.com
+🌐 https://scamsense-66ry.onrender.com
 
 ## Features
 - Transaction fraud detection using Random Forest (83.9% accuracy)
